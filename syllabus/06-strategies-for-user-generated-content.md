@@ -1,0 +1,3 @@
+# 6. Strategies for User Generated Content
+
+Write here...
