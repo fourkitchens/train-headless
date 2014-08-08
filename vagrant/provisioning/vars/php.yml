@@ -1,0 +1,22 @@
+php_version_55: true
+php_memory_limit: "256M"
+php_max_execution_time: "90"
+php_upload_max_filesize: "256M"
+php_webserver_daemon: "nginx"
+php_enable_php_fpm: true
+php_packages:
+  - php5-common
+  - php5-dev
+  - php5-cli
+  - php5-curl
+  - php5-fpm
+  - php5-gd
+  - php5-imagick
+  - php5-intl
+  - php5-ldap
+  - php5-memcache
+  - php5-mysql
+  - php-soap
+  - php5-xdebug
+  - php5-xmlrpc
+  - libapache2-mod-php5
