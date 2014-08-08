@@ -1,0 +1,12 @@
+<?php
+/**
+ * @file
+ * Installation and removal.
+ */
+
+/**
+ * Implements hook_disable().
+ */
+function blog_migrate_disable() {
+  Migration::deregisterMigration('Blog');
+}
