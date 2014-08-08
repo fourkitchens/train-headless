@@ -18,6 +18,8 @@
           root: "/home/vagrant/finished/drupal"
           listen: 8081
     - role: Ansibles.mysql
-    #- role: kosssi.composer
+    - role: geerlingguy.php
+    - role: kosssi.composer
   vars_files:
   - vars/mysql.yml
+  - vars/php.yml
