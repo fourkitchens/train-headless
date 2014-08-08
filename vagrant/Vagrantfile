@@ -33,6 +33,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.playbook = "provisioning/playbook.yml"
   end
 
+  # some setup tasks run with bash
+  config.vm.provision "shell", path: "drupal-setup/install.sh"
+
 
   # Forwarded ports
   config.vm.network "forwarded_port", guest: 3000, host: 3000
