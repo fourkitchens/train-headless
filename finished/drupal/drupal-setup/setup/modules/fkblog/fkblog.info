@@ -1,8 +1,9 @@
-name = "Migrate Four Kitchens Blog Posts"
+name = "Four Kitchens Blog Posts"
 core = 7.x
 package = "Migration"
 version = 7.x-1.1
 
+dependencies[] = services
 dependencies[] = migrate
 
 files[] = blog_migrate.migrate.inc

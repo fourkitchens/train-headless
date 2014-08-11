@@ -10,6 +10,6 @@ sed -i "" 's/\# RewriteBase \//RewriteBase \//' .htaccess
 cp -R ../setup/modules/blog_migrate sites/all/modules/custom/
 mkdir -p sites/default/files/migration/blog
 cp ../setup/migration/blog/blog.xml sites/default/files/migration/blog
-drush -y en blog_migrate
+drush -y en fkblog
 drush mar
 drush mi BlogPost
