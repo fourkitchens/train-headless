@@ -7,7 +7,7 @@
 /**
  * Implements hook_migrate_api().
  */
-function blog_migrate_migrate_api() {
+function fkblog_migrate_api() {
   $api = array(
     'api' => 2,
     'migrations' => array(

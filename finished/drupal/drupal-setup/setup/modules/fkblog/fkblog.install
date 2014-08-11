@@ -7,6 +7,6 @@
 /**
  * Implements hook_disable().
  */
-function blog_migrate_disable() {
+function fkblog_disable() {
   Migration::deregisterMigration('Blog');
 }
