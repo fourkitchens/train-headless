@@ -1,15 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-cd /home/vagrant/finished/drupal
+/home/vagrant/.composer/vendor/bin/drush -y make --no-cache /home/vagrant/finished/drupal/drupal-setup/setup/site.make www
 
-drush -y make --no-cache setup/site.make www
-cd www
-drush -y si --account-name=admin --account-pass=admin --db-url=mysql://root:pass@localhost/trainingdrupal
-sed -i "" 's/\# RewriteBase \//RewriteBase \//' .htaccess
-cp -R ../setup/modules/blog_migrate sites/all/modules/custom/
-mkdir -p sites/default/files/migration/blog
-cp ../setup/migration/blog/blog.xml sites/default/files/migration/blog
-drush -y en fkblog
-drush mar
-drush mi BlogPost
+cd /home/vagrant/finished/drupal/www/
+/home/vagrant/.composer/vendor/bin/drush -y si --account-name=admin --account-pass=admin --db-url=mysql://sqluser:sqluser@localhost/drupal_finished
+
+sed -i 's/\# RewriteBase \//RewriteBase \//' /home/vagrant/finished/drupal/www/.htaccess
+
+cp -R /home/vagrant/finished/drupal/drupal-setup/setup/modules/fkblog /home/vagrant/finished/drupal/www/sites/all/modules/custom/
+mkdir -p /home/vagrant/finished/drupal/www/sites/default/files/migration/blog
+cp /home/vagrant/finished/drupal/drupal-setup/setup/migration/blog/blog.xml /home/vagrant/finished/drupal/www/sites/default/files/migration/blog
+
+/home/vagrant/.composer/vendor/bin/drush -y en fkblog
+/home/vagrant/.composer/vendor/bin/drush mar
+/home/vagrant/.composer/vendor/bin/drush mi BlogPost

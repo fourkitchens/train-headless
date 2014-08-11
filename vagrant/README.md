@@ -2,4 +2,4 @@
 
 ## First download roles
 
-ansible-galaxy install bennojoy.ntp bennojoy.nginx Ansibles.mysql ansible-galaxy install kosssi.composer
+ansible-galaxy install bennojoy.ntp bennojoy.nginx Ansibles.mysql ansible-galaxy pbuyle.php-composer

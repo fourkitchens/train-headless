@@ -1,25 +1,16 @@
 - hosts: all
   sudo: yes
   roles:
-    - role: bennojoy.ntp
-    - role: bennojoy.nginx
-      nginx_http_params:
-        sendfile: "on"
-        access_log: "/var/log/nginx/access.log"
-      nginx_sites:
-      - server:
-          file_name: drupal
-          server_name: localhost
-          root: "/home/vagrant/workspace/drupal"
-          listen: 8080
-      - server:
-          file_name: drupal-finished
-          server_name: localhost
-          root: "/home/vagrant/finished/drupal"
-          listen: 8081
-    - role: Ansibles.mysql
-    - role: geerlingguy.php
-    - role: kosssi.composer
+    - bennojoy.ntp
+    - bennojoy.nginx
+    - Ansibles.mysql
+    - geerlingguy.php
+    - role: pbuyle.php-composer
+      composer_json:
+        require:
+          "drush/drush": "6.*"
+    - web
   vars_files:
+  - vars/nginx.yml
   - vars/mysql.yml
   - vars/php.yml

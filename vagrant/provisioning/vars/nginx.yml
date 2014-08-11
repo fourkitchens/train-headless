@@ -1,0 +1,24 @@
+nginx_http_params:
+  sendfile: "on"
+  access_log: "/var/log/nginx/access.log"
+nginx_sites:
+  - server:
+      file_name: drupal
+      server_name: localhost
+      root: "/home/vagrant/workspace/drupal/www"
+      listen: 8080
+      location1: {name: ~ \.php$,
+        fastcgi_split_path_info: '^(.+\.php)(/.+)$',
+        fastcgi_pass: "unix:/var/run/php5-fpm.sock",
+        fastcgi_index: "index.php",
+        include: "fastcgi_params"}
+  - server:
+      file_name: drupal-finished
+      server_name: localhost
+      root: "/home/vagrant/finished/drupal/www"
+      listen: 8081
+      location1: {name: ~ \.php$,
+        fastcgi_split_path_info: '^(.+\.php)(/.+)$',
+        fastcgi_pass: "unix:/var/run/php5-fpm.sock",
+        fastcgi_index: "index.php",
+        include: "fastcgi_params"}
