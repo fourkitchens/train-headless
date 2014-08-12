@@ -1,0 +1,17 @@
+- hosts: all
+  sudo: yes
+  roles:
+    - common
+    - bennojoy.ntp
+    - bennojoy.nginx
+    - Ansibles.mysql
+    - geerlingguy.php
+    - role: pbuyle.php-composer
+      composer_json:
+        require:
+          "drush/drush": "6.*"
+    - web
+  vars_files:
+  - vars/nginx.yml
+  - vars/mysql.yml
+  - vars/php.yml

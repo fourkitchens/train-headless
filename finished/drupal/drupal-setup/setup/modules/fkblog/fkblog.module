@@ -1,0 +1,129 @@
+<?php
+/**
+ * @file
+ * This space intentionally not left blank.
+ */
+
+/**
+ * Implements hook_default_services_endpoint().
+ */
+function fkblog_default_services_endpoint() {
+  $export = array();
+
+  $endpoint = new stdClass();
+  $endpoint->disabled = FALSE; /* Edit this to true to make a default endpoint disabled initially */
+  $endpoint->api_version = 3;
+  $endpoint->name = 'api';
+  $endpoint->server = 'rest_server';
+  $endpoint->path = 'api';
+  $endpoint->authentication = array();
+  $endpoint->server_settings = array(
+    'formatters' => array(
+      'json' => TRUE,
+      'bencode' => FALSE,
+      'jsonp' => FALSE,
+      'php' => FALSE,
+      'xml' => FALSE,
+      'yaml' => FALSE,
+    ),
+    'parsers' => array(
+      'application/json' => TRUE,
+      'application/vnd.php.serialized' => FALSE,
+      'application/x-www-form-urlencoded' => FALSE,
+      'application/x-yaml' => FALSE,
+      'application/xml' => FALSE,
+      'multipart/form-data' => FALSE,
+      'text/xml' => FALSE,
+    ),
+  );
+  $endpoint->resources = array(
+    'blogpost' => array(
+      'operations' => array(
+        'retrieve' => array(
+          'enabled' => '1',
+        ),
+      ),
+    ),
+  );
+  $endpoint->debug = 1;
+  $export['api'] = $endpoint;
+
+  return $export;
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+function fkblog_services_resources() {
+  return array(
+   'blogpost' => array(
+     'retrieve' => array(
+       'help' => 'Retrieves a node',
+       'file' => array('type' => 'inc', 'module' => 'fkblog', 'name' => 'fkblog'),
+       'callback' => '_blogpost_retrieve',
+       'access callback' => '_blogpost_access',
+       'access arguments' => array('view'),
+       'access arguments append' => TRUE,
+       'args' => array(
+         array(
+           'name' => 'id',
+           'type' => 'int',
+           'description' => 'The id of the blogpost to get',
+           'source' => array('path' => '0'),
+           'optional' => FALSE,
+         ),
+       ),
+     ),
+   ),
+  );
+}
+
+/**
+ * Gets a node object by id.
+ *
+ * @param int $id
+ * @return object
+ */
+function blogpost_get_id($id) {
+  return node_load($id);
+}
+
+/**
+ * Implements hook_permission().
+ */
+function fkblog_permission() {
+  return array(
+    'view any blog post' => array(
+      'title' => t('View any Blog Posts'),
+      'description' => t('View any Blog Posts from the API.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_user_default_permissions().
+ */
+function fkblog_user_default_permissions() {
+  $permissions = array();
+
+  $permissions['view any blog post'] = array(
+    'name' => 'view any blog post',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'fkblog',
+  );
+
+  return $permissions;
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function fkblog_ctools_plugin_api($module = NULL, $api = NULL) {
+  if ($module == "services" && $api == "services") {
+    return array("version" => "3");
+  }
+}
