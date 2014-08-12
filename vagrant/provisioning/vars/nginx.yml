@@ -1,24 +1,75 @@
+drupal_php_settings: &PHP
+  port_in_redirect: "off"
+  index: index.html index.php /index.php
+  location1: {
+    name: /favicon.ico,
+    log_not_found: "off",
+    access_log: "off"
+  }
+  location2: {
+    name: /robots.txt,
+    allow: all,
+    log_not_found: "off",
+    access_log: "off"
+  }
+  location3: {
+    name: /backup,
+    deny: all
+  }
+  location4: {
+    name: ~* \.(txt|log)$,
+    deny: all
+  }
+  location5: {
+    name: ~ \..*/.*\.php$,
+    return: 403
+  }
+  location6: {
+    name: /,
+    try_files: $uri $uri/index.html /index.html @rewrite
+  }
+  location7: {
+    name: "@rewrite",
+    rewrite: "^/(.*)$ /index.php?q=$1"
+  }
+  location8: {
+    name: ~ \.php$,
+    fastcgi_split_path_info: '^(.+\.php)(/.+)$',
+    fastcgi_pass: "unix:/var/run/php5-fpm.sock",
+    fastcgi_index: "index.php",
+    include: "fastcgi_params"
+  }
+  location9: {
+    name: ~ ^/sites/.*/files/imagecache/,
+    try_files: $uri @rewrite
+  }
+  location10: {
+    name: ~ ^/sites/.*/files/styles/,
+    try_files: $uri @rewrite
+  }
+  location11: {
+    name: ~* \.(js|css|png|jpg|jpeg|gif|ico)$,
+    expires: max,
+    log_not_found: "off"
+  }
+
 nginx_http_params:
   sendfile: "on"
+  tcp_nopush: "on"
+  tcp_nodelay: "on"
+  types_hash_max_size: "2048"
   access_log: "/var/log/nginx/access.log"
+  error_log: "/var/log/nginx/error.log"
 nginx_sites:
   - server:
       file_name: drupal
       server_name: localhost
       root: "/home/vagrant/workspace/drupal/www"
       listen: 8080
-      location1: {name: ~ \.php$,
-        fastcgi_split_path_info: '^(.+\.php)(/.+)$',
-        fastcgi_pass: "unix:/var/run/php5-fpm.sock",
-        fastcgi_index: "index.php",
-        include: "fastcgi_params"}
+      <<: *PHP
   - server:
       file_name: drupal-finished
       server_name: localhost
       root: "/home/vagrant/finished/drupal/www"
       listen: 8081
-      location1: {name: ~ \.php$,
-        fastcgi_split_path_info: '^(.+\.php)(/.+)$',
-        fastcgi_pass: "unix:/var/run/php5-fpm.sock",
-        fastcgi_index: "index.php",
-        include: "fastcgi_params"}
+      <<: *PHP
