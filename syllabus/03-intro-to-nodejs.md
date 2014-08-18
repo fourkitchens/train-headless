@@ -118,7 +118,7 @@ app.listen(3000);
 
 The `app.VERB()` methods provide the routing functionality in Express. With the new application instance you can start defining routes via `app.VERB()`, in this case `GET /`. The `req` and res are the exact same objects that node provides to you, thus you may invoke `req.pipe()`, `req.on('data', callback)` and anything else you would do without Express involved.
 
-`javascript
+```javascript
 
 var express = require('express');
 var app = express();
@@ -138,14 +138,15 @@ app.get('/:nid', function(req, res){
 });
 
 app.listen(3000);
-`
+```
+
 > What?
 
 ### HTTP Get
 
-`javascript
+```javascript
 var http = require('http');
-`
+```
 
 [HTTP Get](http://nodejs.org/api/http.html#http_http_get_options_callback)
 
@@ -153,11 +154,11 @@ var http = require('http');
 
 **Convenience Methods!**
 
-`javascript
+```javascript
 
 http.get(requestPath, function (proxyResponse) {
   proxyResponseCode = Number(proxyResponse.statusCode);
   res.statusCode = proxyResponse.statusCode;
   proxyResponse.pipe(res, {end: true});
 });
-`
+```
