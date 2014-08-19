@@ -54,7 +54,7 @@ Everything happens in parallel except for your code.
 
 Every morning all the servants line up, one at a time they come into his throne room. They report on what they've done, sometimes the king gives them more to do. Always one at a time, so the king can focus.
 
-`javascript
+```javascript
 var fs  = require('fs');
 var sys = require('sys');
 
@@ -65,7 +65,8 @@ fs.readFile('treasure-chamber-report.txt', function readFile(report) {
 fs.writeFile('letter-to-princess.txt', '...', function writeFile() {
   sys.puts("can't wait to hear back from her!");
 });
-`
+```
+
 Explain please?
 
 * Code gives Node 2 things to do.
