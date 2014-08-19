@@ -2,4 +2,6 @@
 
 Write here...
 
-Large userbase, slowness, authentication issues.
+* Large userbase, slowness, authentication issues.
+* Angular
+* Comments, Disqus
