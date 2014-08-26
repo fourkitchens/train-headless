@@ -4,7 +4,7 @@ var http = require('http');
 var drupalUrl = '{drupal.services.url}';
 
 app.get('/:nid', function(req, res){
-  // req.params.id exists here
+  // req.params.nid exists here
   var requestPath = drupalUrl + req.params.nid;
 
   http.get(requestPath, function (proxyResponse) {
