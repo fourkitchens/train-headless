@@ -175,7 +175,7 @@ app.get('/:nid', function(req, res){
   var requestPath,
       proxyResponseCode;
 
-  var requestPath = drupalUrl + req.params.nid;
+  requestPath = drupalUrl + req.params.nid;
   http.get(requestPath, function (proxyResponse) {
     proxyResponseCode = Number(proxyResponse.statusCode);
     if (proxyResponseCode < 200 || proxyResponseCode >= 300) {
@@ -217,7 +217,7 @@ app.get('/:nid', function(req, res){
   var requestPath,
       proxyResponseCode;
 
-  var requestPath = drupalUrl + req.params.nid;
+  requestPath = drupalUrl + req.params.nid;
   http.get(requestPath, function (proxyResponse) {
     proxyResponseCode = Number(proxyResponse.statusCode);
     if (proxyResponseCode < 200 || proxyResponseCode >= 300) {
