@@ -12,7 +12,7 @@ app.get('/:nid', function(req, res){
     if (!error && response.statusCode == 200) {
       res.send(body);
     }
-  })
+  });
 });
 
 app.listen(3000);

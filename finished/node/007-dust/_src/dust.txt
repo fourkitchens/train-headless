@@ -1,0 +1,6 @@
+module.exports = (function() {
+  var dust = require("dustjs-linkedin");
+  <%= contents %>
+  // Returning object for nodejs
+  return dust;
+})();
