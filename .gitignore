@@ -2,3 +2,5 @@
 finished/drupal/www
 
 finished/node/*/node_modules
+
+finished/node/*/dist
