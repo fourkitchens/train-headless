@@ -85,9 +85,19 @@ function fkblog_services_resources() {
  * @return object
  */
 function blogpost_get_id($id) {
-  return node_load($id);
+  $node = node_load($id);
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $sensible = new stdClass();
+  $sensible->nid = $wrapper->getIdentifier();
+  $sensible->author = $wrapper->author->name->value();
+  $sensible->title = $wrapper->title->value();
+  $sensible->body = $wrapper->body->value->value();
+  return $sensible;
 }
-
+function fkblog_node_view($node, $view_mode, $langcode) {
+  dpm($node);
+  dpm(blogpost_get_id($node->nid));
+}
 /**
  * Implements hook_permission().
  */

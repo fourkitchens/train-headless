@@ -29,9 +29,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     type: "nfs", create: true
 
   # provision using ansible
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "provisioning/playbook.yml"
-  end
+  # config.vm.provision "ansible" do |ansible|
+  #   ansible.playbook = "provisioning/playbook.yml"
+  # end
 
   # some setup tasks run with privileged
   config.vm.provision :shell, path: "drupal-setup/install.sh", privileged: false
