@@ -4,6 +4,12 @@
  * This space intentionally not left blank.
  */
 
+use Level3\Resource\Link;
+use Level3\Resource\Resource;
+use Level3\Resource\Format\Writer\HAL;
+
+module_load_include('inc','rest_server', 'includes/ServicesParser');
+module_load_include('inc', 'rest_server', 'includes/ServicesFormatter');
 /**
  * Implements hook_default_services_endpoint().
  */
@@ -19,7 +25,8 @@ function fkblog_default_services_endpoint() {
   $endpoint->authentication = array();
   $endpoint->server_settings = array(
     'formatters' => array(
-      'json' => TRUE,
+      'json' => FALSE,
+      'hal' => TRUE,
       'bencode' => FALSE,
       'jsonp' => FALSE,
       'php' => FALSE,
@@ -27,7 +34,8 @@ function fkblog_default_services_endpoint() {
       'yaml' => FALSE,
     ),
     'parsers' => array(
-      'application/json' => TRUE,
+      'application/hal+json' => TRUE,
+      'application/json' => FALSE,
       'application/vnd.php.serialized' => FALSE,
       'application/x-www-form-urlencoded' => FALSE,
       'application/x-yaml' => FALSE,
@@ -50,6 +58,8 @@ function fkblog_default_services_endpoint() {
 
   return $export;
 }
+
+
 
 /**
  * Implements hook_services_resources().
@@ -85,6 +95,36 @@ function fkblog_services_resources() {
  * @return object
  */
 function blogpost_get_id($id) {
+  global $base_url;
+  $node = node_load($id);
+  $wrapper = entity_metadata_wrapper('node', $node);
+
+  $hal = new Resource();
+  $hal->setURI($base_url . '/node/'. $wrapper->getIdentifier());
+  $hal->addData('nid', $wrapper->getIdentifier());
+  $hal->addData('author', $wrapper->author->name->value());
+  $hal->addData('title', $wrapper->title->value());
+  $hal->addData('body', $wrapper->body->value->value());
+  $images = [];
+
+  foreach ($wrapper->field_image->getIterator() as $delta => $image_wrapper) {
+    $image = new Resource();
+    $image_array = $image_wrapper->value();
+
+    $image->addData('url',file_create_url($image_array['uri']));
+    $image->addData('width', $image_array['width']);
+    $image->addData('height', $image_array['height']);
+    $image->addData('alt', $image_array['alt']);
+
+    $writer = new HAL\JsonWriter(true);
+
+    dpm($writer->execute($image));
+    $images[] = $image;
+  }
+  $hal->addResources('images', $images);
+
+  return $hal;
+/* simple example.
   $node = node_load($id);
   $wrapper = entity_metadata_wrapper('node', $node);
   $sensible = new stdClass();
@@ -93,11 +133,9 @@ function blogpost_get_id($id) {
   $sensible->title = $wrapper->title->value();
   $sensible->body = $wrapper->body->value->value();
   return $sensible;
+*/
 }
-function fkblog_node_view($node, $view_mode, $langcode) {
-  dpm($node);
-  dpm(blogpost_get_id($node->nid));
-}
+
 /**
  * Implements hook_permission().
  */
