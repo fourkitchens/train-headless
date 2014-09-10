@@ -1,6 +1,6 @@
 name = FK Blog Features
 core = 7.x
-package = Headless Drupal
+package = Headless Training
 dependencies[] = features
 dependencies[] = image
 dependencies[] = media
