@@ -1,0 +1,16 @@
+{
+  "name": "001-express",
+  "version": "0.0.1",
+  "description": "A basic Express.js App",
+  "main": "app.js",
+  "author": "Matthew Grill",
+  "license": "ISC",
+  "dependencies": {
+    "express" : "~4.8.4",
+    "request" : "~2.42.0",
+    "gulp": "~3.8.0",
+    "gulp-dust" : "~1.0.1",
+    "gulp-wrap" : "0.3.0",
+    "dustjs-linkedin" : "~2.4.1"
+  }
+}
