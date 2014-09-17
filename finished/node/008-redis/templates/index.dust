@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="text/html" http-equiv="Content-Type">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body class="html js">
+    <h1>{title}</h1>
+    <h2>{author}</h2>
+    {body|s}
+  </body>
+</html>
