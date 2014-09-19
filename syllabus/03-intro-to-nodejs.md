@@ -117,7 +117,41 @@ app.listen(3000);
 
 > hello world
 
-The `app.VERB()` methods provide the routing functionality in Express. With the new application instance you can start defining routes via `app.VERB()`, in this case `GET /`. The `req` and res are the exact same objects that node provides to you, thus you may invoke `req.pipe()`, `req.on('data', callback)` and anything else you would do without Express involved.
+The `app.VERB()` methods provide the routing functionality in Express. With the new application instance you can start defining routes via `app.VERB()`, in this case `GET /`. The `req` and res are the exact same objects that node provides to you, so you can invoke `req.pipe()`, `req.on('data', callback)` and anything else you would do without Express involved.
+
+### Error handling
+
+> Error-handling is just another middleware
+
+Capturing, and handling errors will help your app fail gracefully, and possibyly avoid having a hard fail. 
+
+```javascript
+app.use(captureError);
+```
+
+Let's tell Express to use this named function `captureError` to capture all of our errors. 
+
+```javascript
+function captureError(err, req, res, next) {
+  // Do something with your error here.
+}
+```
+
+### Middleware 
+
+Express 4.0 has removed the previously included middlware. These are availabe here, [https://github.com/senchalabs/connect#middleware](https://github.com/senchalabs/connect#middleware).
+
+### Routes
+
+Routes? `app.get('/post/:nid',mycallback);`
+
+```javascript
+app.get('/api/drupal/:nid', function(req, res, next) { ... });
+app.post('/api/drupal/:nid/comment', function(req, res, next) { ... });
+app.del('/api/drupal/:nid/comment', function(req, res, next) { ... });
+```
+
+### Connecting to Drupal with HTTP
 
 ```javascript
 
