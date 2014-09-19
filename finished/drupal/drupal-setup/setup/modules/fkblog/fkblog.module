@@ -105,7 +105,7 @@ function blogpost_get_id($id) {
   $hal->addData('author', $wrapper->author->name->value());
   $hal->addData('title', $wrapper->title->value());
   $hal->addData('body', $wrapper->body->value->value());
-  $images = [];
+  $images = array();
 
   foreach ($wrapper->field_image->getIterator() as $delta => $image_wrapper) {
     $image = new Resource();
