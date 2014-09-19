@@ -25,4 +25,5 @@ cp /home/vagrant/finished/drupal/drupal-setup/setup/migration/blog/blog.xml $WWW
 /home/vagrant/.composer/vendor/bin/drush -y en fkblog
 /home/vagrant/.composer/vendor/bin/drush mar
 /home/vagrant/.composer/vendor/bin/drush mi BlogPost
-/home/vagrant/.composer/vendor/bin/drush -y composer-manager install
+#/home/vagrant/.composer/vendor/bin/drush cc drush
+#/home/vagrant/.composer/vendor/bin/drush -y composer-manager install

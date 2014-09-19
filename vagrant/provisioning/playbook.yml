@@ -5,7 +5,7 @@
     - bennojoy.ntp
     - bennojoy.nginx
     - Ansibles.mysql
-    - geerlingguy.php
+    - php
     - role: pbuyle.php-composer
       composer_json:
         require:
