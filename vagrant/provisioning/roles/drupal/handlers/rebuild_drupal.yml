@@ -1,0 +1,8 @@
+---
+- name: Run Drush Make
+  action: command "/home/vagrant/.composer/vendor/bin/drush -y make --no-cache /home/vagrant/finished/drupal/drupal-setup/setup/site.make www" 
+  notify: Rewrite rewrite base
+
+- name: Rewrite rewrite base
+  action: command "sed -i 's/\# RewriteBase \//RewriteBase \//' /home/vagrant/finished/drupal/www/.htaccess"
+  notify: 

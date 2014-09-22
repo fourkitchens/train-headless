@@ -1,0 +1,56 @@
+---
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: PHP | Add PHP 5.5 PPA
+  apt_repository: repo='ppa:ondrej/php5:'
+  when: php_version_55 and ansible_os_family == 'Debian'
+
+- name: PHP | Update apt cache
+  action: apt update-cache=yes
+  when: php_version_55 and ansible_os_family == 'Debian'
+
+- name: Define php_packages.
+  set_fact: php_packages="{{ __php_packages | list }}"
+  when: php_packages is not defined
+
+- name: Ensure PHP packages are installed (RedHat).
+  yum: >
+    name={{ item }}
+    state=installed
+    enablerepo={{ php_enablerepo }}
+  with_items: php_packages
+  notify: restart webserver
+  when: ansible_os_family == 'RedHat'
+
+- name: Ensure PHP packages are installed (Debian).
+  apt: >
+    name={{ item }}
+    state=installed
+  with_items: php_packages
+  notify: restart webserver
+  when: ansible_os_family == 'Debian'
+
+- name: Place PHP < 5.5 configuration files in place.
+  template: >
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root group=root mode=644
+  with_items:
+  - { src: php.ini.j2, dest: "{{ php_conf_path }}/php.ini" }
+  - { src: apc.ini.j2, dest: "{{ php_extension_conf_path }}/{{ php_apc_conf_filename }}" }
+  notify: restart webserver
+  when: php_version_55 == false
+
+- name: Place PHP > 5.5 configuration files in place.
+  template: src=php55.ini.j2 dest="{{ php_conf_path }}/php.ini" owner=root group=root mode=644
+  notify: restart webserver
+  when: php_version_55 == true
+
+- name: Ensure php-fpm is started and enabled at boot (if configured).
+  service: name=php-fpm state=started enabled=yes
+  when: php_enable_php_fpm and ansible_os_family == 'RedHat'
+
+- name: Ensure php-fpm is started and enabled at boot (if configured).
+  service: name=php5-fpm state=started enabled=yes
+  when: php_enable_php_fpm and ansible_os_family == 'Debian'
