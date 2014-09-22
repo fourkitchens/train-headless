@@ -5,12 +5,15 @@
     - bennojoy.ntp
     - bennojoy.nginx
     - Ansibles.mysql
+    - role: DavidWittman.redis
+      bind_redis: 127.0.0.1
     - php
     - role: pbuyle.php-composer
       composer_json:
         require:
           "drush/drush": "6.*"
     - web
+    - nodejs
   vars_files:
   - vars/nginx.yml
   - vars/mysql.yml
