@@ -1,6 +1,6 @@
 {
-  "name": "001-express",
-  "version": "0.0.1",
+  "name": "007-dust",
+  "version": "0.0.7",
   "description": "A basic Express.js App",
   "main": "app.js",
   "author": "Matthew Grill",
