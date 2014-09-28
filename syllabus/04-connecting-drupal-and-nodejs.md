@@ -1,4 +1,4 @@
-# 4. Connecting Node.js and Drupal 
+# 4. Connecting Node.js and Drupal
 
 ## DustJS - The Linkedin fork
 
@@ -12,7 +12,7 @@
 
 [DustJS](http://linkedin.github.io/dustjs/)
 
-### You like numbers? 
+### You like numbers?
 
 > Dust template for this demo compiles in about 30 ms.
 
@@ -40,7 +40,7 @@ If your client doesn't support executing javascript, you can use the same Dust t
 
 [Show me the code!](https://github.com/linkedin/dustjs/wiki/Dust-Tutorial#Why_JavaScript_Templating)
 
-Your template code, 
+Your template code,
 
 ```html
 
@@ -57,15 +57,15 @@ Your JSON data,
 
 ```json
 {
- "title": "Famous People", 
+ "title": "Famous People",
  "names" : [{ "name": "Larry" },{ "name": "Curly" },{ "name": "Moe" }]
 }
 ```
 
-And your rendered output. 
+And your rendered output.
 
 ```html
-Famous People 
+Famous People
 <ul>
   <li>Larry</li>
   <li>Curly</li>
@@ -106,7 +106,7 @@ var options = {
 
 Request's first parameter is either the URL you want, or an [object](https://github.com/mikeal/request#requestoptions-callback) with your properties.
 
-Our two that we'll be keeping the same for the purpose of this demonstration. 
+Our two that we'll be keeping the same for the purpose of this demonstration.
 
 * url|uri - fully qualified uri or a parsed url object from `url.parse()`
 * json - sets body but to JSON representation of value and adds Content-type:
@@ -117,9 +117,9 @@ Now what?
 request(options).pipe(res);
 ```
 
-Pipe the response from `request` to the response, `res`, provided by express. If you don't care about security, and just want to pass JSON, this is an incredibly easy way to proxy content. 
+Pipe the response from `request` to the response, `res`, provided by express. If you don't care about security, and just want to pass JSON, this is an incredibly easy way to proxy content.
 
-> Don't do this. Care about security. 
+> Don't do this. Care about security.
 
 ```javascript
 request(options, function (error, response, body) {
@@ -131,7 +131,7 @@ request(options, function (error, response, body) {
 
 If there's no error, and the status code is 200, send the `body` to the client.
 
-Cool. 
+Cool.
 
 But we're still just proxying JSON from Drupal, through Node.JS to our clients. Not very useful, *unless this is your usecase*. Let's connect these pieces together and get something special going.
 
@@ -168,9 +168,9 @@ A snippet of our Dust template. `{title}` and `{author}` are replacements. When 
 What about `|s`? Hello `{name|s}` suppresses auto-escaping. If your JSON response contains some HTML from Drupal, you'll want supress escaping so the output is rendered correctly.
 
 > If there is no value found for a key, nothing is output.
-> 
+>
 > Template whitespace is largely discarded. See section on whitespace control for details if you want a different behavior. Take special care if you have a JavaScript code block and have comments of the form // message. When all the newlines are removed, this will comment out the following statement. Use the /* message */ form instead.
-> 
+>
 > {! Comment syntax !} is how you write comments
 
 [DustJS Filters](https://github.com/linkedin/dustjs/wiki/Dust-Tutorial#more-on-dust-output-and-dust-filters)
@@ -191,7 +191,7 @@ gulp.task('dust', function () {
 });
 ```
 
-Not going to go into too much detail. However, find your templates, pipe to dust compiler, format with our custom template, write to the dist directory. 
+Not going to go into too much detail. However, find your templates, pipe to dust compiler, format with our custom template, write to the dist directory.
 
 `npm install && gulp`
 
@@ -205,9 +205,9 @@ dust.render('index.dust', body, function(err, html_out) {
 });
 ```
 
-Dust.render(). Each template is registered with `dust`, `dust.register("index.dust",body_0)`. This is the name you'll reference when rendering your content, it's also the first argument in the `dust.render()` function. The second argument, the body; the response from the request you made previously. 
+Dust.render(). Each template is registered with `dust`, `dust.register("index.dust",body_0)`. This is the name you'll reference when rendering your content, it's also the first argument in the `dust.render()` function. The second argument, the body; the response from the request you made previously.
 
-Finally, the callback. 
+Finally, the callback.
 
 > Callback spaghetti is a sign that you're doing something wrong.
 
@@ -221,7 +221,9 @@ You've now sent your rendered html to your client.
 
 :boom:
 
-### Streams
+
+---
+### If you get ahead: Streams
 
 ```javascript
 var chunkedResponse = [];
@@ -241,17 +243,6 @@ I hear you like chunks?
 
 > Templates may also be streamed. dust.stream returns a handler very similar to a Node EventEmitter:
 
-Push the response onto an array. When we've recieved an 'end' signal, wrap everything up and send it to the client. 
+Push the response onto an array. When we've recieved an 'end' signal, wrap everything up and send it to the client.
 
-This can be useful if you need to do something special with the content before it's sent to the user. Caching? 
-
-
-
-
-
-
-
-
-
-
-
+This can be useful if you need to do something special with the content before it's sent to the user. Caching?

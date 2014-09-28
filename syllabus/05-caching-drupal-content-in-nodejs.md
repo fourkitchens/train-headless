@@ -10,7 +10,7 @@
 
 ### Performance?
 
-Redis is fast. 
+Redis is fast.
 
 Keys are stored 'in-memory', database is saved to disk incrementally.
 
@@ -68,25 +68,7 @@ Don't rely on just benchmarks. Test, collect data, analyze.
 
 [Scaling Redis at Twitter](https://www.youtube.com/watch?v=rP9EKvWt0zo)
 
-### Installing & Running Redis
 
-OSX - `~: brew reinstall redis`
-
-*You're using Homebrew right?*
-
-Ubuntu/*nix - 
-```
-wget http://download.redis.io/releases/redis-2.8.15.tar.gz
-tar -xvzf redis-*.tar.gz
-cd redis-2.8.15
-make
-```
-
-You might need `build-essential` and `tcl` on Ubuntu, depending on your previous configuration.
-
-```
-~: redis-server /usr/local/etc/redis.conf
-```
 
 
 ### Redis Clients
@@ -149,17 +131,17 @@ Hiredis parser (c bindings) is faster, but if you're hitting the limit of the na
 
 ### Checking Redis before Drupal
 
-Redis is fast. Let's use it for some of the things it's good at. 
+Redis is fast. Let's use it for some of the things it's good at.
 
-Check if our key exists in Redis, No. Request some JSON to render, render that with Dust and send the output to the client. That's around 16ms. 
+Check if our key exists in Redis, No. Request some JSON to render, render that with Dust and send the output to the client. That's around 16ms.
 
-That's still very fast. 
+That's still very fast.
 
 But let's speed it up.
 
-> Rendered HTML from Dust? Let's save that in Redis. 
+> Rendered HTML from Dust? Let's save that in Redis.
 
-Check if our key exists, Yes? Send HTML to the client. 5ms. 
+Check if our key exists, Yes? Send HTML to the client. 5ms.
 
 That's blazing fast.
 
@@ -221,7 +203,7 @@ client  = redis.createClient();
 
 The Node.JS Redis library supports all Redis commands, including many recently added commands like EVAL from experimental Redis server branches.
 
-Even some fancy helpers. 
+Even some fancy helpers.
 
 ```javacsript
 client.hgetall({KEY}, function (err, obj) {
@@ -272,7 +254,7 @@ client.hmset(key, data, callback);
 Send our rendered html output to the client after we've saved the key.
 `res.send(html_out);`
 
-### TTL Bonus
+### If you get ahead TTL Bonus
 
 > Redis expires. You can set a timeout to a key, which is, a limited time to live. When the time to live elapsed, the key is automatically destroyed, exactly like if the user called the DEL command with the key.
 
@@ -322,7 +304,7 @@ How does this apply to us?
 client.expire('node:'+req.params.nid, 60);
 ```
 
-To keep our content fresh, let's set the TTL of our key to 60 (seconds). Our JSON response, and our rendered HTML will be removed from Redis after just 60 seconds. 
+To keep our content fresh, let's set the TTL of our key to 60 (seconds). Our JSON response, and our rendered HTML will be removed from Redis after just 60 seconds.
 
 ## Clearing Redis from Drupal
 
@@ -347,10 +329,30 @@ Drupal can blindly pass an array of keys to our Node.JS app which will clear the
 
 ### Bonus.
 
-Add some error handling for keys that don't exist. Check for keys that exist. 
+Add some error handling for keys that don't exist. Check for keys that exist.
 
 ## Bonus!
 
 Cache-Manager
 
 https://www.npmjs.org/package/cache-manager
+
+### Installing & Running Redis
+
+OSX - `~: brew reinstall redis`
+
+*You're using Homebrew right?*
+
+Ubuntu/*nix -
+```
+wget http://download.redis.io/releases/redis-2.8.15.tar.gz
+tar -xvzf redis-*.tar.gz
+cd redis-2.8.15
+make
+```
+
+You might need `build-essential` and `tcl` on Ubuntu, depending on your previous configuration.
+
+```
+~: redis-server /usr/local/etc/redis.conf
+```
