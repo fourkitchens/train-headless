@@ -246,3 +246,28 @@ I hear you like chunks?
 Push the response onto an array. When we've recieved an 'end' signal, wrap everything up and send it to the client.
 
 This can be useful if you need to do something special with the content before it's sent to the user. Caching?
+
+## Traverson
+> A well constructed client then only needs to know the URI of the root resource and can find its way from there to every other resource by following links with well defined relations
+
+[Traverson](https://blog.codecentric.de/en/2013/11/traverson/)
+[Traverson-Git](https://github.com/basti1302/traverson)
+
+Examples
+* https://api.github.com/
+
+```javascript
+var traverson = require('traverson')
+var api = traverson.json.from('http://api.io')
+
+api.newRequest()
+   .follow('link_to', 'resource')
+   .getResource(function(error, document) {
+  if (error) {
+    console.error('No luck :-)')
+  } else {
+    console.log('We have followed the path and reached our destination.')
+    console.log(JSON.stringify(document))
+  }
+});
+```
