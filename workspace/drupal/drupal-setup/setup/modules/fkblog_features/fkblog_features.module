@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the FK Blog Features feature.
+ */
+
+include_once 'fkblog_features.features.inc';

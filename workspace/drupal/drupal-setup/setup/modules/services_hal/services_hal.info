@@ -1,0 +1,10 @@
+name = "Services HAL Resource"
+core = 7.x
+package = "Headless Training"
+version = 7.x-0.9
+
+dependencies[] = services
+dependencies[] = rest_server
+dependencies[] = composer_manager
+
+files[] = servicesHAL.inc

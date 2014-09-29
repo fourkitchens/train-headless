@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Adds a services module HAL parsers and formatters.
+ */
+
+/**
+ * Immplemnets HOOK_rest_server_request_parsers_alter()
+ */
+function fkblog_rest_server_request_parsers_alter(&$parsers) {
+  $parsers['application/hal+json'] = 'ServicesParserHAL';
+}
+
+/**
+ * Implements HOOK_rest_server_response_formatters_alter()
+ */
+function fkblog_rest_server_response_formatters_alter(&$formatters) {
+  $formatters['hal'] = array(
+    'mime types' => array('application/hal+json','application/json','text/hal+json','text/json'),
+    'formatter class' => 'ServicesHALFormatter'
+  );
+}

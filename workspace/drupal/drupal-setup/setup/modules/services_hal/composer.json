@@ -1,0 +1,5 @@
+{
+    "require": {
+        "level3/resource": "dev-master"
+    }
+}
