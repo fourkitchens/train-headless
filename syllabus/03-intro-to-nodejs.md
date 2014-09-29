@@ -59,11 +59,11 @@ var fs  = require('fs');
 var sys = require('sys');
 
 fs.readFile('treasure-chamber-report.txt', function readFile(report) {
-  sys.puts("oh, look at all my money: "+report);
+  sys.puts('oh, look at all my money: '+report);
 });
 
 fs.writeFile('letter-to-princess.txt', '...', function writeFile() {
-  sys.puts("can't wait to hear back from her!");
+  sys.puts('can not wait to hear back from her!');
 });
 ```
 
@@ -90,7 +90,7 @@ We don't need to wait for the file being read, to write the file. Both System IO
 
 ### WHat is Node.js not good for?
 
-* General purpose web server
+* General purpose web server.
 * Complex systems (business logic)
 
 ## Express.js
