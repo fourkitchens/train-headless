@@ -69,8 +69,6 @@ Don't rely on just benchmarks. Test, collect data, analyze.
 [Scaling Redis at Twitter](https://www.youtube.com/watch?v=rP9EKvWt0zo)
 
 
-
-
 ### Redis Clients
 
 [Clients](http://redis.io/clients)
@@ -81,7 +79,7 @@ There are plently of Redis clients for nearly every language. PHP, `Predis` and 
 #### Node.JS
 [Node Redis](https://github.com/mranney/node_redis)
 
-We'll be using `node_redis` for this training.
+We'll be using `redis` for this training.
 
 > This is a complete Redis client for node.js. It supports all Redis commands, including many recently added commands like EVAL from experimental Redis server branches.
 
