@@ -175,6 +175,9 @@ app.get('/:nid', function(req, res){
 app.listen(3000);
 ```
 
+---
+## If you get ahead Get, and some proxy magic.
+
 > What?
 
 ### HTTP Get
