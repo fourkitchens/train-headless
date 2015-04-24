@@ -175,6 +175,9 @@ What about `|s`? Hello `{name|s}` suppresses auto-escaping. If your JSON respons
 
 [DustJS Filters](https://github.com/linkedin/dustjs/wiki/Dust-Tutorial#more-on-dust-output-and-dust-filters)
 
+---
+## If you get ahead: Compiled templates and HAL libraries
+
 So how do I 'compile' this dust template. We've included a Gulp file for that exact purpose.
 
 > var dust = require('gulp-dust');
