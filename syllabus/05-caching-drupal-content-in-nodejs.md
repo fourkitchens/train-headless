@@ -102,3 +102,89 @@ Q
 ```
 
 Ensure that all your responses are not empty. Determine if you have cached data after.
+
+## Exercises
+
+### Simple Redis Cache
+
+#### Setting up the application
+
+Add all your required dependences. The `crypto` library is a standard-lib from Node.JS, which is why it's not included in `package.json`.
+
+```javascript
+var crypto  = require('crypto'),
+    express = require('express'),
+    app     = express(),
+    redis   = require('redis'),
+    client  = redis.createClient(),
+    port    = 3000;
+```
+
+We're creating an `app`, and a `client` variable to manage our interaction with Express and Redis.
+
+Here we've attached a `get` and a `listen` method to our `app`. 
+
+> Any ideas about what `/:title?` will match; The significance of `:title` and `?` ?
+
+```javascript
+app
+  // Attach a `get` method to the Express app.
+  .get('/:title?', function (req, res) {
+    res.send('hello world');
+  })
+  // Attach a listen method, and listen on our port.
+  .listen(port, function () {
+    console.log('Example app listening at http://localhost:%s', port);
+  });
+```
+
+Title is a named parameter. This means you can access it's value from within the `req.params` object. For our next step let's ensure that we always have a value for title, `req.params.title    = req.params.title || '';`.
+
+#### Creating your key/value
+
+This helps us ensure that the keys will be different for each path. 
+
+```javascript
+// Generate both the key, and the value for saving to the cache.
+var key   = crypto.createHash('md5').update(req.params.title).digest('hex'),
+    value = req.params.title + '|' + new Date().toISOString();
+```
+
+#### Saving your key
+
+The method, `client.set`, is the same in name to the command that redis provides. The first two parameters are the `key`, and the `value` we created earlier. The third is our callback, which executes and sends our key back to the requesting client. 
+
+```javascript
+// Signal Redis to save the key, and the value.
+// This is a simple string save. The most basic key type.
+client.set(key, value, function (err, reply) {
+  // Return the `key` to the client.
+  res.send(key);
+});
+```
+
+### Intermediate Redis Cache
+
+This builds off our previous work. Instead of just setting the key/value, we check to see if a key exists, and use it's reply if it does.
+
+```javascript
+client.get(key, function (err, reply) {
+  // If the reply is empty, create and save the key.
+  if (!reply) {
+    client.set(key, value, function (err, reply) {
+      // Return the `key` to the client.
+      return res
+              .send(key);
+    });
+  }
+  // If we have a reply, send it.
+  else {
+    return res
+            .send(reply);
+  }
+});
+```
+
+### Bonus Round
+
+Set a `ttl` for the key we just wrote to Redis, ensuring that it auto expires after `60` seconds.
