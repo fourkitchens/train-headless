@@ -1,6 +1,21 @@
 # 2. Drupal Services
 
 ## Drupal Web Services
+### Outline
+* Module Options
+  * Why Restful
+* Install & configure Restful
+* Create Endpoints
+  * Single node endpoint
+  * Node collection endpoint
+    * Filtering content
+  * Referenced content (node author)
+  * Handling Media
+  * Queued Content
+* Hypermedia API Design in practice
+  * Apiary for mocking & Docs.
+  * Mocking in Drupal directly.
+* Drupal Overview
 ### Different Module Options
 * Services
   * The module we are using
