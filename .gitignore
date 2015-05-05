@@ -5,3 +5,6 @@ finished/node/*/node_modules
 
 finished/node/*/dist
 vagrant/package.box
+
+examples/node/*/node_modules
+workspace/node/*/node_module

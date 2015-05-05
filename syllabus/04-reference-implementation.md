@@ -1,29 +1,6 @@
-# 4. Headless A-ha's & Reference implementation introduction
+# 4. Reference implementation introduction
 
-## Headless A-ha's
 
-- API _only_ sites are very different than _websites_, in fact a good API driven site is very focused and not easily aligned with the ad-hoc WYSIWYG Drupal mind set of sticking blocks or widgets any which way and having that show up. No one out there has really tackled the idea of page contexts, the additional information you would need in addition to a single endpoint payload to make an API driven page just as arbitrary as a Drupal page. This all goes to the question, 
-> **“Is an API driven site right for my business?”**
-
-- Getting an Apiary or _apiary-like_ mock API provider up as soon as possible lets teams get active asynchronously faster and then you have shippable components on the API, back end, and front-end available.
-
-- Dustjs can’t parse hal+json because of the `:` in many of the keys. We sanitized the data to change `:` to `_`
-> [Github Issue](https://github.com/linkedin/dustjs/issues/229)
-> [sanitize.js](https://github.com/fourkitchens/headless-framework/blob/master/lib/processors/sanitize.js)
-
-- The restful Drupal module requires keyed objects or associative arrays in URL parameters in this syntax: `filter[type]=7&filter[created]=1425404668`. The [RFC 6570 spec](http://tools.ietf.org/html/rfc6570) does not allow for this syntax. Filtering is tough. Being able to pass the filter information to the API is tricky. For example, `/posts/:type/:created/prev-next` is a route, but what happens if we don’t want to filter by type?
-
-- Use Plural nouns for endpoints both listings and single items.
-> `api/people` & `api/people/13`
-
-- Unless you have a endpoint for it, it **ain’t** coming out of the API.
-
-- Don't forget basic things you get for free from _Apache, Nginx, Drupal_,
-  - Handle 404’s -- you probably need to design a 404 page depending on your server.
-  - How are you going to handle redirects?
-  - How are you going to handle URL paths, what technology is involved in creating the routes and cleaning them.
-  
-- Cache Clearing is hard.
 
 ## Reference Implementation Introduction
 
@@ -203,5 +180,115 @@ Famous People
 ```
 
 :boom:
+
+## Exercises
+
+Update the `git` sub modules for this project, _there are a few_.
+
+```shell
+git submodule update
+```
+
+Additionally, add the following to `config/secrets.json`
+
+```json
+{
+  "wwwSecret": "1wo7kwewmi",
+  "apiSecret": "48eusaif6r",
+  "routeCacheSecret": "pb89yxy9zfr"
+}
+```
+
+#### Creating Routes
+
+Blog posts is a listing route. Currently the caching of data from listing pages is _not_ supported, but should be upcoming.
+
+```
+/**
+ + Posts
+ */
+app.routeSection('/posts', 'content/posts/posts.dust', {});
+```
+
+In it's most basic form, `routeSection`, and `routeItem` are wrappers around the basic `get` method from Express. However here we have the option to attach some additional _options_.
+
+The first parameter is always the route to match, this can be a regex. The second parameter is the template that will be used to render the final response. Finally, the `options` object.
+
+There are a few optional keys, but the required one is the `resource` key. This is the internal API path. This is an array, and accepts unlimited values. Each request will be processed asynchronously, and their values returned, keyed by their name. 
+
+We'll refer to this as _multi-get_ in the future. 
+
+```
+/**
+ + Posts
+ */
+app.routeSection('/posts', 'content/posts/posts.dust', {
+  resource: ['blogposts'],
+  processors: []
+});
+```
+
+Another additional route option is, `passQuery: true`. This forwards all query parameters from the initial request to the back-end. 
+
+#### Creating Templates
+
+Dust is mostly just `HTML`.
+
+There is a base template at `workspace/node/headless-framework/_src/templates/base_template.dust`.
+
+This should be your wrapper. If you're familiar with Sass, then the modularity of Dust will make sense.
+
+Each of your partials should be exporting a _block_, but to render that _block_ we need to let the parent partial know about it. 
+
+> `{+pageContent/}`
+
+The next template we'll create is the actual partial for rendering the blog posts. 
+
+```dust
+{>"base_template.dust" title="Posts"/}
+
+{<pageContent}
+  // your content
+{/pageContent}
+```
+
+This let's dust know that we're returning a _block_ named `pageContent` and everything within the markup should be inserted into the body of the base template.
+
+The syntax for loops in dust is pretty simplistic, and it's what you'll probably be using most of the time. This loops though the specific array of objects for our blog posts listing page. Within the loop, keys are available by their name, `{self}`, and sub keys are available with dot-notation.
+
+```dust
+{>"base_template.dust" title="Posts"/}
+
+{<pageContent}
+  {#_embedded.fk_blogposts}
+    
+  {/_embedded.fk_blogposts}
+{/pageContent}
+```
+
+The final template with some additional `HTML` structure.
+
+```dust
+{>"base_template.dust" title="Posts"/}
+
+{<pageContent}
+  <div class="wrapper">
+    <h1>posts</h1>
+    {#_embedded.fk_blogposts}
+      <h1>
+        <a href="{self}">
+        {label}
+        </a>
+      </h1>
+      <p> Categories:
+      {#categories}
+        {label},
+      {/categories}
+      <p>
+    {/_embedded.fk_blogposts}
+    <a href="{_links.fk_next.href}">Next</a>
+  </div>
+{/pageContent}
+```
 
 
