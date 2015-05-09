@@ -1,5 +1,12 @@
 # 5. Caching Drupal Content in Node.js
 
+## Outline
+
+- Intro to Redis
+- Performance
+- Cache concepts
+- Cache examples and workflow
+
 ## Redis
 
 ![](http://drupo.co/images/training/redis.png)
