@@ -1,0 +1,6 @@
+[submodule "workspace/node/headless-framework"]
+	path = workspace/node/headless-framework
+	url = git@github.com:fourkitchens/headless-framework.git
+[submodule "finished/node/headless-framework"]
+	path = finished/node/headless-framework
+	url = git@github.com:fourkitchens/headless-framework.git

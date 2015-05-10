@@ -1,5 +1,12 @@
 # 1. Introduction to Headless Drupal
 
+## Outline
+* When to go Headless
+  * Speed of Development
+  * Separation of teams/resources
+  * Same data, lots of different consumers
+  * Architecture Patterns
+
 ## When to go Headless
 ### Speed of development
 - Faster if you have a REST API in place.
@@ -12,7 +19,44 @@
     - Mention TSWJF?
 - Separation of concerns
 - When the the Drupal presentation layer is getting in your way.
-## Architecture Patterns
+
+## Architecture Patterns for Decoupled sites.
+### Architecture parts
+- Routing
+  - Clean URLs
+- Caching
+- Tempting
+- Error Handling
+- Interactivity
+- Authentication
+  - Permissions
+- API Versioning strategy & implementation
+- API Documentation strategy & implementation
+
+
+### Patterns
+- Cache & Theme
+  - passthrough to API
+  - cache response
+  - routing handled in lightweight application like node.js or Silex
+  - Examples
+  - Pros & Cons
+- Client Side Tempting
+  - Web App
+  - Angular
+- Static Side Generator
+  - baked.js, roots.js
+- Drupal to Drupal
+  - Separate creation and rendering but use everyone's favorite CMS for both.
+- Isomorphic Frameworks
+  - Rendered page first, followed by JSON.
+  - Angular-server
+  - http://fluxible.io/
+  - React something
+  - The holy grail.
+
+
+### Technologies
 - Node.JS
 	- You build the webserver.
     - You create routes and controllers and pick your rendering engine.
