@@ -7,6 +7,8 @@ projects[drupal][version] = 7.37
 projects[ctools][subdir] = "contrib"
 projects[ctools][version] = "1.4"
 
+projects[admin_menu][subdir] = "contrib"
+
 projects[entity][subdir] = "contrib"
 projects[entity][version] = "1.6"
 
