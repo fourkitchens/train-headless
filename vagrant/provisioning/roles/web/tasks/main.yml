@@ -1,9 +1,0 @@
----
-##
-# Additional web tasks and files not handled by community playbooks
-#
-
-- name: php-fpm | Enable socket for php-fpm
-  action: copy src=etc/php5/fpm/pool.d/www.conf dest=/etc/php5/fpm/pool.d/www.conf
-  notify:
-    - restart php5-fpm

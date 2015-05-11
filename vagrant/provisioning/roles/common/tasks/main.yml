@@ -1,7 +1,0 @@
----
-##
-# Common stuff.
-#
-
-- name: Insure curl is installed
-  apt: name=curl state=present
