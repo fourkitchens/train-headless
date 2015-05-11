@@ -5,6 +5,7 @@ version = 7.x-1.1
 
 dependencies[] = migrate
 dependencies[] = fkblog_features
+dependencies[] = admin_menu_toolbar
 
 files[] = blog_migrate.migrate.inc
 
