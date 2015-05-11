@@ -13,6 +13,9 @@ projects[entity][subdir] = "contrib"
 projects[entity][version] = "1.6"
 projects[entity][patch][] = "https://www.drupal.org/files/issues/2086225-entity-access-check-18.patch"
 
+projects[devel][subdir] = "contrib"
+projects[devel][version] = "1.5"
+
 projects[restful][subdir] = "contrib"
 projects[restful][version] = "1.0"
 
