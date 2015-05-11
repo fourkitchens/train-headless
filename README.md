@@ -1,9 +1,31 @@
-# Getting Started 
+# Getting Started
 
-## Vagrant
+## Class handbook is available at:
 
-Copy the entire training directory to your computer. *Remember where you copy it*
+[http://www.mirzu.com/headless-training-book/](http://www.mirzu.com/headless-training-book/)
 
-Run `vagrant box add train-headless /path/to/the/package.box`.
+## Class notes available here:
 
-Change to the `vagrant` folder contained within the Git repo (on your computer) and run *vagrant up*.
+[Google Doc](http://bit.ly/1E25cDN)
+
+## SSH to our server.
+
+```bash
+ssh {username}@4kclass.com
+```
+password is ```headless2016la```
+
+Your Drupal environment is available at: http://{username}.drupal.4kclass.com/
+
+The administration user is ```admin``` with password ```admin```
+
+Feel free to add your public ssh key
+```bash
+cat ~/.ssh/id_rsa.pub | ssh {username}@4kclass.com "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
+```
+
+Feel free to use an FTP client if you'd prefer.
+*enable SFTP*
+host: 4kclass
+password: headless2016la
+port: 22
