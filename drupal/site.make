@@ -20,11 +20,11 @@ projects[features][version] = "2.5"
 
 projects[fkblog][subdir] = "contrib"
 projects[fkblog][download][type] = "local"
-projects[fkblog][download][source] = "./modules/fkblog"
+projects[fkblog][download][source] = "~/train-headless/drupal/modules/fkblog"
 
 projects[fkblog][subdir] = "features"
 projects[fkblog][download][type] = "local"
-projects[fkblog][download][source] = "./modules/fkblog_features"
+projects[fkblog][download][source] = "~/train-headless/drupal/modules/fkblog_features"
 
 projects[media][subdir] = "contrib"
 projects[media][version] = "1.5"
