@@ -1,0 +1,10 @@
+{
+  "name": "0-introduction-to-express",
+  "version": "1.0.0",
+  "description": "Introduction to ExpressJS",
+  "main": "app.js",
+  "dependencies": {
+    "adaro": "^1.0.0-15",
+    "express": "^4.12.4"
+  }
+}

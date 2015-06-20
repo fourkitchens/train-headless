@@ -9,15 +9,15 @@
 ## Reference Implementation Introduction
 
 ```
-██╗  ██╗██╗  ██╗    ██╗  ██╗███████╗ █████╗ ██████╗ ██╗     ███████╗███████╗███████╗
-██║  ██║██║ ██╔╝    ██║  ██║██╔════╝██╔══██╗██╔══██╗██║     ██╔════╝██╔════╝██╔════╝
-███████║█████╔╝     ███████║█████╗  ███████║██║  ██║██║     █████╗  ███████╗███████╗
-╚════██║██╔═██╗     ██╔══██║██╔══╝  ██╔══██║██║  ██║██║     ██╔══╝  ╚════██║╚════██║
-     ██║██║  ██╗    ██║  ██║███████╗██║  ██║██████╔╝███████╗███████╗███████║███████║
-     ╚═╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚══════╝╚══════╝
+███████╗ █████╗ ██╗   ██╗ ██████╗██╗███████╗██████╗
+██╔════╝██╔══██╗██║   ██║██╔════╝██║██╔════╝██╔══██╗
+███████╗███████║██║   ██║██║     ██║█████╗  ██████╔╝
+╚════██║██╔══██║██║   ██║██║     ██║██╔══╝  ██╔══██╗
+███████║██║  ██║╚██████╔╝╚██████╗██║███████╗██║  ██║
+╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝╚══════╝╚═╝  ╚═╝
 ```
 
-> [4K Headless](https://github.com/fourkitchens/headless-framework)
+> [SAUCIER](https://github.com/fourkitchens/saucier)
 
 ### Why?
 
@@ -28,13 +28,12 @@
 
 ## Let's Make Something
 
-Update the `git` sub modules for this project, _there are a few_.
-
-```shell
-git submodule update
-```
-
-Additionally, add the following to `config/secrets.json`
+- Create an `./config/env.json` file. A template is located at, `./config/_env.json`
+- Ensure the `local` environment in `./config/env.json` is populated with
+  - The API endpoint you want to operate against.
+  - The Redis instance you want to get/set information from.
+- Create an `./config/_secrets.json` file. A template is located at, `./config/secrets.json`.
+- Populate the `./config/secrets.json` file.
 
 ```json
 {
@@ -63,11 +62,11 @@ app.routeMulti('/', 'content/home.dust', {
 });
 ```
 
-> [web.js](https://github.com/fourkitchens/headless-framework/blob/master/routes/web.js#L5)
+> [web.js](https://github.com/fourkitchens/saucier/blob/master/routes/web.js)
 
 Routes for listing pages, collections if items, are identified with `routeSection()`. Currently the caching of data from listing pages is _not_ supported, but should be upcoming.
 
-```
+```javascript
 /**
  * Posts
  */
@@ -82,9 +81,9 @@ There are a few optional keys, but the required one is the `resource` key. This 
 
 We'll refer to this as _multi-get_ in the future. 
 
-```
+```javascript
 /**
- + Posts
+ * Posts
  */
 app.routeSection('/posts', 'content/posts/posts.dust', {
   resource: ['blogposts'],
@@ -119,12 +118,21 @@ app.routeItem('/posts/:type/:title', 'content/posts/post.dust', {
  * @param {object} options An object that configures the Controller instance
  * @return {object} res The response object
  */
-function handleGet(route, template, options) {
+var handleGet         = function (route, template, options) {
+   /**
+    * Handle GET responses in a generic way
+    * @private
+    * @param {(string|regexp)} route The route to match.
+    * @param {string} template Template name that will be used to format the response
+    * @param {object} options An object that configures the Controller instance
+    * @return {object} res The response object
+    */
   app.get(route, function (req, res, next) {
-    debug('PATH: ' + req.path);
+    var path = req.path;
+    path += Object.keys(req.query).length !== 0 ? helpers.serialize(req.query) : '';
+    debug('PATH: ' + path);
     debug('ROUTE TYPE: ' + options.type);
-
-    Q(helpers.getConfig(options, config, req, template, templateEngine))
+    Q(helpers.getConfig(options, config, req, template, templateEngine, keepAliveAgent))
       .then(cache.get)
       .then(api.get)
       .then(cache.set)
@@ -133,20 +141,19 @@ function handleGet(route, template, options) {
       .then(function (response) {
         return res
                 .set({
-                  'Cache-Control': 'public, max-age=345600',
-                  'Expires': new Date(Date.now() + 345600000).toUTCString()
+                  'Cache-Control': 'max-age=86400',
+                  'Expires': new Date(Date.now() + 86400000).toUTCString()
                 })
                 .send(response);
-
       })
       .fail(function (options) {
         return next(options);
       });
-  });
-}
+    });
+};
 ```
 
-> [headless.js](https://github.com/fourkitchens/headless-framework/blob/master/lib/headless.js#L42)
+> [headless.js](https://github.com/fourkitchens/saucier/blob/master/lib/headless.js)
 
 - Implemented custom methods for handling different types of requests. 
   - `routeMulti`, `routeSection`, `routeItem`
@@ -276,4 +283,4 @@ options.engine.render(options.template, data, function (error, html) {
 });
 ```
 
-> [render.js](https://github.com/fourkitchens/headless-framework/blob/master/lib/render.js#L21)
+> [render.js](https://github.com/fourkitchens/saucier/blob/master/lib/render.js)
