@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>WELCOME TO TCDC.</title>
+  </head>
+  <body>
+    <h1>{name}, welcome to TCDC.</h1>
+    <h2>Check out my sweet blog.</h2>
+    {#posts}
+      <h3><a href="/article/{id}">{title}</a></h3>
+      <p>{body}</p>
+    {/posts}
+
+  </body>
+</html>

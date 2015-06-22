@@ -1,9 +1,3 @@
-[submodule "workspace/node/headless-framework"]
-	path = workspace/node/headless-framework
-	url = git@github.com:fourkitchens/headless-framework.git
-[submodule "finished/node/headless-framework"]
-	path = finished/node/headless-framework
-	url = git@github.com:fourkitchens/headless-framework.git
 [submodule "headless-training-book"]
 	path = headless-training-book
-	url = https://github.com/mirzu/headless-training-book
+	url = git@github.com:mirzu/headless-training-book.git
