@@ -1,0 +1,12 @@
+{
+  "name": "cache",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "adaro": "^1.0.0-15",
+    "express": "^4.13.0",
+    "redis": "^0.12.1",
+    "request": "^2.58.0"
+  }
+}

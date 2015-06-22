@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>WELCOME TO TCDC.</title>
+  </head>
+  <body>
+    <main>
+      <h1><a href="/posts">TCDC BLOG</a></h1>
+      <article>
+        <h2>{data[0].label}</h2>
+        {data[0].body|s}
+      </article>
+    </main>
+  </body>
+</html>

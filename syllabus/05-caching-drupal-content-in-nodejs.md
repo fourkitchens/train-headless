@@ -2,10 +2,9 @@
 
 ## Outline
 
-- Intro to Redis
-- Performance
+- Redis
 - Cache concepts
-- Cache examples and workflow
+- Activities
 
 ## Redis
 
@@ -15,38 +14,7 @@ Redis is an open source, BSD licensed, advanced key-value cache and store. It is
 
 > [Redis](http://redis.io/)
 
-### Performance
-
-Redis is fast. Keys are stored _in-memory_, database is saved to disk incrementally.
-
-```
-~: redis-benchmark -q -n 100000
-PING_INLINE: 70821.53 requests per second
-PING_BULK: 72463.77 requests per second
-SET: 66844.91 requests per second
-GET: 70571.62 requests per second
-INCR: 69881.20 requests per second
-LPUSH: 71123.76 requests per second
-LPOP: 68166.33 requests per second
-SADD: 69492.70 requests per second
-SPOP: 73099.41 requests per second
-LPUSH (needed to benchmark LRANGE): 68775.79 requests per second
-LRANGE_100 (first 100 elements): 21496.13 requests per second
-LRANGE_300 (first 300 elements): 9692.74 requests per second
-LRANGE_500 (first 450 elements): 6845.56 requests per second
-LRANGE_600 (first 600 elements): 5220.30 requests per second
-MSET (10 keys): 42016.80 requests per second
-```
-
-Default benchmark runs against a single key.
-
-> One million SET operations, using a random key for every operation out of 100k possible keys.
-
-```
-redis-benchmark -t set -r 100000 -n 1000000
-```
-
-### Sets
+## Cache concepts
 
 - Cache everything.
 - Have a standardized method for creating keys. 
@@ -59,139 +27,141 @@ redis-benchmark -t set -r 100000 -n 1000000
   - Strings
     - Serialize & De-serialize on each request.
 
-> Luckily native `JSON` support comes with [JavaScript](http://es5.github.io/#x15.12).
-
-In the headless framework we're using the request path, and replacing all forward slashes with colons, `req.path.substr(1).replace(new RegExp('/', 'g'), ':')`.
-
-> How about creating a key for saving `JSON`?
-
-```javascript
-var ttl = options.api.body.hasOwnProperty('_ttl') ? options.api.body._ttl : options.config.ttl;
-options.req.db.set(options.cache.json, JSON.stringify(options.api.body), function (error) {
-  if (error) {
-    // handle errors.
-  }
-  else {
-    // handle 'all good'
-  }
-});
-```
-
-Ensure we reject our promise chain if there is an error with Redis, `deferred.reject(helpers.createErrorResponse(500, [error]));`; resolve with the `options` object if everything is good, `deferred.resolve(options)`.
-
-An important note, 
-
-```javascript
-.then(cache.get)
-.then(api.get)
-.then(cache.set)
-```
-
-We're setting the cache immediately after getting a value back from the API.
-
-> How about setting the TTL for a key?
-
-### Lookups
-
 Always check your cache. Drupal is slow, and you'll want to avoid making a network round-trip if you can.
 
 Take advantage of [multi-get](http://redis.io/commands/mget). This prevents us from making multiple round-trips to Redis. This is especially important if Redis is not physically located near your front-end.
 
 ```javascript
-Q
-  .ninvoke(options.req.db, 'mget', [options.cache.json, options.cache.key])
-  .then(function (results) {
-    // success handler
-  })
-  .fail(function () {
-    // fail handler
+client.mget(['my-key', 'my-second-key'], function (err, data) {
+  console.log(err, data);
+})
+```
+
+
+## Activities
+
+### Requesting Data from Drupal
+
+Require some new libraries we'll need for these activities.
+
+- Require `redis`, `request`, and `crypto`.
+- Create a `redis` client, `client = redis.createClient();`
+
+---
+
+```javascript
+var express = require('express'),
+      path = require('path'),
+      adaro = require('adaro'),
+      redis = require('redis'),
+      request = require('request'),
+      crypto = require('crypto'),
+      client = redis.createClient(),
+      app = express();
+```
+
+- Create a route that listens on `/posts` route.
+- Request data from Drupal
+
+```javascript
+app.get('/posts', function (req, res) {
+  request({
+    url: 'http://mirzu.restful.webchefs.org:8080/api/v1.2/blogposts',
+    json: true
+  }, function (error, response, body) {
+    return res.send(body);
   });
-```
-
-Ensure that all your responses are not empty. Determine if you have cached data after.
-
-## Exercises
-
-### Simple Redis Cache
-
-#### Setting up the application
-
-Add all your required dependences. The `crypto` library is a standard-lib from Node.JS, which is why it's not included in `package.json`.
-
-```javascript
-var crypto  = require('crypto'),
-    express = require('express'),
-    app     = express(),
-    redis   = require('redis'),
-    client  = redis.createClient(),
-    port    = 3000;
-```
-
-We're creating an `app`, and a `client` variable to manage our interaction with Express and Redis.
-
-Here we've attached a `get` and a `listen` method to our `app`. 
-
-> Any ideas about what `/:title?` will match; The significance of `:title` and `?` ?
-
-```javascript
-app
-  // Attach a `get` method to the Express app.
-  .get('/:title?', function (req, res) {
-    res.send('hello world');
-  })
-  // Attach a listen method, and listen on our port.
-  .listen(port, function () {
-    console.log('Example app listening at http://localhost:%s', port);
-  });
-```
-
-Title is a named parameter. This means you can access it's value from within the `req.params` object. For our next step let's ensure that we always have a value for title, `req.params.title    = req.params.title || '';`.
-
-#### Creating your key/value
-
-This helps us ensure that the keys will be different for each path. 
-
-```javascript
-// Generate both the key, and the value for saving to the cache.
-var key   = crypto.createHash('md5').update(req.params.title).digest('hex'),
-    value = req.params.title + '|' + new Date().toISOString();
-```
-
-#### Saving your key
-
-The method, `client.set`, is the same in name to the command that redis provides. The first two parameters are the `key`, and the `value` we created earlier. The third is our callback, which executes and sends our key back to the requesting client. 
-
-```javascript
-// Signal Redis to save the key, and the value.
-// This is a simple string save. The most basic key type.
-client.set(key, value, function (err, reply) {
-  // Return the `key` to the client.
-  res.send(key);
 });
 ```
 
-### Intermediate Redis Cache
+> Visit [http://localhost:3000/posts](http://localhost:3000/posts)
 
-This builds off our previous work. Instead of just setting the key/value, we check to see if a key exists, and use it's reply if it does.
+Every time someone makes a request for the `/posts` route, an external data source will be fetched. The `request()` function takes two parameters, an object with some options, and a callback; in the call back is where you can return the data.
+
+- `url` is our remote environment
+- `json` lets request know that our response is JSON and it should automatically parse the response.
+
+For the callback function you get three variables, `error`, `response`, `body`.
+
+### Cache Drupal Response
+
+Store the remote url and our `cacheKey` as variables so they can be reused. Make sure these variables are declared within the `app.get()` callback.
 
 ```javascript
-client.get(key, function (err, reply) {
-  // If the reply is empty, create and save the key.
-  if (!reply) {
-    client.set(key, value, function (err, reply) {
-      // Return the `key` to the client.
-      return res
-              .send(key);
+var remote = 'http://mirzu.restful.webchefs.org:8080/api/v1.2/blogposts',
+    cacheKey = crypto.createHash('sha1').update(req.url + port).digest('hex');
+```
+
+- Change the `url` option of _request_ to be the `remote` variable. 
+
+Your `cacheKey` is a `sha1` hash of the request URL and the port (combined). This is something that should be unique to each request, otherwise you might accidentally return incorrect data.
+
+Now, request the _data_ at the specific key we just created. This should be included within the `app.get()` callback. With just this you'll only see `null, null` in the console; we haven't yet set the cache key.
+
+```javascript
+client.get(cacheKey, function (err, reply) {
+  console.log(err, reply)
+});
+```
+
+**We only want to make requests to Drupal if there is nothing in our cache.**
+
+Every HTTP request you have to make will slow down your application. Speed matters. _Cache everything!_
+
+---
+
+```javascript
+client.get(cacheKey, function (err, reply) {
+  if (reply !== null) {
+    return res.send(reply);
+  }
+  else {
+    request({
+      url: remote,
+      json: true
+    }, function (error, response, body) {
+      return res.send(body);
     });
   }
-  // If we have a reply, send it.
+});
+```
+
+In this instance we're only making a request to Drupal if the `reply` from Redis was `null`. 
+
+We can use the `.set()` method from the node-redis library to save the response from Drupal in Redis. 
+
+```javascript
+client.set(key, value, function (err, reply) {
+  // DO STUFF
+});
+```
+
+- Use `client.set()` to store the response from Drupal in Redis.
+- Ensure the JSON is stored as a string in Redis, and parsed when returned. 
+
+---
+
+```javascript
+client.get(cacheKey, function (err, reply) {
+  if (reply !== null) {
+    return res.send(JSON.parse(reply));
+  }
   else {
-    return res
-            .send(reply);
+    request({
+      url: remote,
+      json: true
+    }, function (error, response, body) {
+      client.set(cacheKey, JSON.stringify(body), function (err, reply) {
+        return res.send(body);
+      });
+    });
   }
 });
 ```
 
-### Bonus Round
+### _Even More Advanced_
 
-Set a `ttl` for the key we just wrote to Redis, ensuring that it auto expires after `60` seconds.
+- Use a `multi object` to set cached data at it's `ttl`.
+- Create a dust template to render this data.
+- Create an optional route parameter to filter all posts by their id
+  - Change the template for this single post.
