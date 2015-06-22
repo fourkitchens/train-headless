@@ -1,0 +1,9 @@
+<?php
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+ function restful_fourword_ctools_plugin_directory($module, $plugin) {
+   if ($module == 'restful') {
+     return 'plugins/' . $plugin;
+   }
+ }
