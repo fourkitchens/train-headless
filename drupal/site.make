@@ -35,6 +35,5 @@ projects[views][version] = "3.11"
 
 projects[restful_fourword][type] = "module"
 projects[restful_fourword][download][type] = "git"
-projects[restful_fourword][download][url] = "git@github.com:fourkitchens/restful_fourword.git"
-projects[restful_fourword][download][branch] = "lesson3-3"
-projects[restful_fourword][download][revision] = "23557eb77fceb1b5c8e9f076ef4f27383086f1ea"
+projects[restful_fourword][download][url] = "https://github.com/fourkitchens/restful_fourword.git"
+projects[restful_fourword][download][tag] = "lesson_1_start"
