@@ -15,7 +15,7 @@
   app.set('view engine', 'dust');
 
   app.get('/posts/:id?', function (req, res) {
-    var remote = 'http://mirzu.restful.webchefs.org:8080/api/v1.2/blogposts',
+    var remote = 'http://mirzu.drupal.tcdc2015.4kclass.com:8080/api/v1.2/articles',
         template = 'posts',
         cacheKey = crypto.createHash('sha1').update(req.url + port).digest('hex');
 
