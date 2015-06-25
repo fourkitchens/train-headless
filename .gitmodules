@@ -1,3 +1,6 @@
 [submodule "headless-training-book"]
 	path = headless-training-book
 	url = git@github.com:mirzu/headless-training-book.git
+[submodule "workspace/node/saucier"]
+	path = workspace/node/saucier
+	url = git@github.com:fourkitchens/saucier.git
