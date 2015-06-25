@@ -32,9 +32,3 @@ projects[restful][version] = "1.0"
 
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.11"
-
-projects[restful_fourword][type] = "module"
-projects[restful_fourword][download][type] = "git"
-projects[restful_fourword][download][url] = "https://github.com/fourkitchens/restful_fourword.git"
-projects[restful_fourword][download][tag] = "lesson_1_start"
-projects[restful_fourword][download][working-copy] = "TRUE"
