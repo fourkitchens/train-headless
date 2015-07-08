@@ -35,7 +35,7 @@
   });
 
   app.get('/example', function (req, res) {
-    res.send('Welcome to TCDC.');
+    res.send('Welcome to NYC Camp.');
   });
 
   app.get('/api', function (req, res) {

@@ -3,16 +3,15 @@ module.exports = {
   posts: [
     {
       'id': 1,
-      'title': 'Welcome to TCDC',
-      'body': 'This is the first entry in my TCDC travel log.',
-      'published': '6/26/2015'
+      'title': 'Welcome to NYC Camp',
+      'body': 'This is the first entry in my NYC Camp travel log.',
+      'published': '7/16/2015'
     },
     {
       'id': 2,
-      'title': 'TCDC is over.',
-      'body': 'On my way home from TCDC',
-      'published': '6/27/2015'
+      'title': 'NYC Camp is over.',
+      'body': 'On my way home from NYC Camp',
+      'published': '7/19/2015'
     }
   ]
 }
-

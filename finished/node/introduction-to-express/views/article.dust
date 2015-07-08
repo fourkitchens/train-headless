@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>WELCOME TO TCDC.</title>
+    <title>WELCOME TO NYC Camp</title>
   </head>
   <body>
     <h3>{[0].title} - {[0].published}</h3>
