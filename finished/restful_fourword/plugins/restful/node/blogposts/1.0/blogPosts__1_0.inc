@@ -13,8 +13,7 @@ $plugin = array(
     'name' => 'default',
     'field_map' => array(
       'body' => 'body',
-      'field_tags' => 'tags',
-      'field_image' => 'image',
+      'categories' => 'field_blog_categories_term_tree',
     ),
   ),
 );
