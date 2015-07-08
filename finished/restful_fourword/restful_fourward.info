@@ -1,4 +1,0 @@
-name = My First RESTful API
-description = Custom RESTful endpoints for my blog.
-core = 7.x
-dependencies[] = restful
