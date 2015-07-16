@@ -27,5 +27,5 @@ cat ~/.ssh/id_rsa.pub | ssh {username}@drupal.headless.4kclass.com "mkdir ~/.ssh
 
 Alternativey, you can use a SFTP client.
 - host: `USERNAME.drupal.headless.4kclass.com`
-- password: `headless2016la`
+- password: `headlessNYC2015`
 - port: `22`
