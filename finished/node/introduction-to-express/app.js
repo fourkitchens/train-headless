@@ -35,7 +35,7 @@
   });
 
   app.get('/example', function (req, res) {
-    res.send('Welcome to NYC Camp.');
+    res.send('Welcome to Drupal Con Barcelona.');
   });
 
   app.get('/api', function (req, res) {

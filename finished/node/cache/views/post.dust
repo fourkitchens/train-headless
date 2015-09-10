@@ -1,10 +1,10 @@
 <html>
   <head>
-    <title>WELCOME TO NYC Camp</title>
+    <title>WELCOME TO Drupal Con Barcelona</title>
   </head>
   <body>
     <main>
-      <h1><a href="/posts">NYC Camp BLOG</a></h1>
+      <h1><a href="/posts">Drupal Con BarcelonaBLOG</a></h1>
       <article>
         <h2>{data[0].label}</h2>
         {data[0].body|s}

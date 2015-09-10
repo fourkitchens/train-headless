@@ -1,9 +1,9 @@
 <html>
   <head>
-    <title>WELCOME TO NYC Camp</title>
+    <title>WELCOME TO Drupal Con Barcelona</title>
   </head>
   <body>
-    <h1>{name}, welcome to NYC Camp.</h1>
+    <h1>{name}, welcome to Drupal Con Barcelona.</h1>
     <h2>Check out my sweet blog.</h2>
     {#posts}
       <h3><a href="/article/{id}">{title}</a></h3>
